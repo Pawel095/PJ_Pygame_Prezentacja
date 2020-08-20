@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "pj_pygame_prezentacja"
+version = "0.1.0"
+description = ""
+authors = ["Paweł 'Andrzej' Pankiewicz <pawel.pankiewicz@xdsa.pl>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pygame = "^1.9.6"
+
+[tool.poetry.dev-dependencies]
+black = "^19.10b0"
+flake8 = "^3.8.3"
+rope = "^0.17.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0a5"]
+build-backend = "poetry.core.masonry.api"
