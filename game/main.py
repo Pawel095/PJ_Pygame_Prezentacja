@@ -1,37 +1,41 @@
-from time import sleep
-from timeit import default_timer as time
-
-import events
-
-import pygame
 import logging
 
-logging.basicConfig(level=logging.DEBUG)
+import pygame
 
+import events
+import loader
+from sprites import Player
+
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+loader.load()
 pygame.init()
 
-window = pygame.display.set_mode((800, 600))
+pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Hell of Bullets")
+
+clk = pygame.time.Clock()
+player = Player()
 
 
 fps_target = 30
 last = 0
 running = True
 while running:
-    now = time()
+    deltaT = clk.tick(60) / 1000
     events.process_events()
 
-    if events.quit:
+    if events.QUIT:
         running = False
 
-    limiter_wait = True
-    waited_times = 0
-    while limiter_wait:
-        sleep(1 / 480)
-        waited_times += 1
-        if time() - now >= 1 / fps_target:
-            limiter_wait = False
+    # PHYSICS UPDATES
+    player.update(deltaT)
 
-    last = now
+    # RENDERING
+    srf = pygame.display.get_surface()
+    srf.fill((0, 0, 0))
+
+    player.draw()
+
+    pygame.display.update()
