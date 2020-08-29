@@ -30,7 +30,10 @@ def load():
     threads.extend(
         [
             worker(pygame.image.load, "assets/bullet.png", "bullet"),
+            worker(pygame.image.load, "assets/e_bullet.png", "e_bullet"),
             worker(pygame.image.load, "assets/Ship-Blue-005.png", "player"),
+            worker(pygame.image.load, "assets/Ship-Red-001.png", "normal_enemy"),
+            worker(pygame.image.load, "assets/Ship-Red-006.png", "turret_enemy"),
         ]
     )
     with ThreadPoolExecutor(max_workers=4) as executor:

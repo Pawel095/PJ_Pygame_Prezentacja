@@ -4,8 +4,9 @@ import pygame
 
 import events
 import loader
-from sprites import Player
 from sprites import bullets
+from sprites import enemy
+from sprites.player import Player
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -19,6 +20,7 @@ pygame.display.set_caption("Hell of Bullets")
 clk = pygame.time.Clock()
 player = Player()
 
+enemy_spawn_ctrl = enemy.Controller()
 
 fps_target = 30
 last = 0
@@ -30,9 +32,10 @@ while running:
     if events.QUIT:
         running = False
 
-    # PHYSICS UPDATES
+    # PHYSICS AND CONTROLLER UPDATES
     player.update(deltaT)
     bullets.update_all_bullets(deltaT)
+    enemy_spawn_ctrl.update(deltaT)
 
     # RENDERING
     srf = pygame.display.get_surface()
@@ -40,5 +43,6 @@ while running:
 
     player.draw()
     bullets.draw_all_bullets()
+    enemy_spawn_ctrl.draw_all_enemies()
 
     pygame.display.update()

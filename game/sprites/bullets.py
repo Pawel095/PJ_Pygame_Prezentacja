@@ -24,3 +24,4 @@ def draw_all_bullets():
 
 def update_all_bullets(deltaT):
     [b.update(deltaT) for b in bullet_objects]
+    # TODO: remove old bullets
