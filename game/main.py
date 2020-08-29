@@ -5,6 +5,7 @@ import pygame
 import events
 import loader
 from sprites import Player
+from sprites import bullets
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -31,11 +32,13 @@ while running:
 
     # PHYSICS UPDATES
     player.update(deltaT)
+    bullets.update_all_bullets(deltaT)
 
     # RENDERING
     srf = pygame.display.get_surface()
     srf.fill((0, 0, 0))
 
     player.draw()
+    bullets.draw_all_bullets()
 
     pygame.display.update()

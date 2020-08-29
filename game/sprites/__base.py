@@ -1,5 +1,8 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
+
 import pygame
+
 
 class Base(ABC):
     def __init__(
