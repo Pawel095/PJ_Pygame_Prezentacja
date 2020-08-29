@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+import pygame
 
 class Base(ABC):
     def __init__(
@@ -41,4 +41,9 @@ class Base(ABC):
 
     @abstractmethod
     def draw(self):
-        pass
+        center = (
+            self.position[0] - self.size[0] / 2,
+            self.position[1] - self.size[1] / 2,
+        )
+        srf = pygame.display.get_surface()
+        srf.blit(self.sprite, center)

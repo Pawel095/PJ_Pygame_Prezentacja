@@ -38,4 +38,4 @@ class Player(Base):
         super().update(deltaT)
 
     def draw(self):
-
+        super().draw()
