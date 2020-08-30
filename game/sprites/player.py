@@ -28,7 +28,7 @@ class Player(Base):
         if events.SHOOT:
             if self.shoot_cooldown_timer >= self.shoot_cooldown:
                 self.shoot_cooldown_timer = 0
-                Bullet("bullet", self.position, speed=2)
+                Bullet("bullet", self.position, velocity=(0, -400), shooter="p")
 
     def movement(self):
         vx, vy = self.velocity

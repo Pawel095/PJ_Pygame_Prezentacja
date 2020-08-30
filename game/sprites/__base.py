@@ -1,5 +1,4 @@
 from abc import ABC
-from abc import abstractmethod
 
 import pygame
 
@@ -27,7 +26,6 @@ class Base(ABC):
         delta = target - current
         return current + delta * step
 
-    @abstractmethod
     def update(self, deltaT):
         self.__linear_update(deltaT)
 
@@ -42,7 +40,6 @@ class Base(ABC):
             py + vy * deltaT + 0.5 * ay * deltaT ** 2,
         )
 
-    @abstractmethod
     def draw(self):
         center = (
             self.position[0] - self.size[0] / 2,

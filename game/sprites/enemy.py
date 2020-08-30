@@ -1,4 +1,6 @@
 from loader import assets
+import random
+import global_vars
 
 from .__base import Base
 from .bullets import Bullet
@@ -7,6 +9,7 @@ from .bullets import Bullet
 class Enemy(Base):
     def __init__(self, sprite_key):
         sprite = assets[sprite_key]
+        self.alive = True
         super().__init__(sprite, speed=300, position=(400, 100))
 
     def update(self, deltaT):
@@ -15,17 +18,23 @@ class Enemy(Base):
     def draw(self):
         super().draw()
 
+    def can_be_forgotten(self):
+        pass
+
 
 class Normal(Enemy):
     def __init__(self):
-        self.shoot_cooldown = 3
-        self.shoot_cooldown_timer = 0
         super().__init__("normal_enemy")
+        randx = random.randint(self.size[0], global_vars.SCREEN_SIZE[0] - self.size[0])
+        self.position = (randx, -self.size[1])
+        self.shoot_cooldown = 1
+        self.shoot_cooldown_timer = 0
+        self.velocity = (0, 50)
 
     def shoot(self):
         if self.shoot_cooldown_timer >= self.shoot_cooldown:
             self.shoot_cooldown_timer = 0
-            Bullet("e_bullet", self.position, (0, 100))
+            Bullet("e_bullet", self.position, (0, 300), shooter="e")
 
     def update(self, deltaT):
         self.shoot_cooldown_timer += deltaT
@@ -63,6 +72,7 @@ class Controller:
             self.cooldown_timers[k] += deltaT
 
         self.spawn_enemies()
+        # TODO: Remove dead enemies
 
     def draw_all_enemies(self):
         [e.draw() for e in self.enemies]

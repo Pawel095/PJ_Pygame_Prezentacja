@@ -4,6 +4,7 @@ import pygame
 
 import events
 import loader
+import global_vars
 from sprites import bullets
 from sprites import enemy
 from sprites.player import Player
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 loader.load()
 pygame.init()
 
-pygame.display.set_mode((800, 600))
+pygame.display.set_mode(global_vars.SCREEN_SIZE)
 pygame.display.set_caption("Hell of Bullets")
 
 clk = pygame.time.Clock()
