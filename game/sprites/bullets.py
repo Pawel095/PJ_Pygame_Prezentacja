@@ -40,10 +40,7 @@ def update_all_bullets(deltaT):
     # remove bullets that are dead and outside the screen
     indices_to_forget = [
         i
-        for i, b in enumerate(bullet_objects)
-        if b.position[1] >= global_vars.SCREEN_SIZE[1]
-        or b.position[1] <= 0
-        or not b.alive
+        for i, b in enumerate(bullet_objects) if b.is_outside_screen() or not b.alive
     ]
     for i in indices_to_forget:
         bullet_objects.pop(i)

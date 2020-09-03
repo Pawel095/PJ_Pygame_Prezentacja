@@ -1,5 +1,3 @@
-import logging
-
 import pygame
 
 import events
@@ -10,8 +8,6 @@ from sprites import enemy
 from sprites.background import Background
 from sprites.player import Player
 
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
 pygame.init()
 loader.load()

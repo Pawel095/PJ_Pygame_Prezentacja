@@ -63,15 +63,17 @@ class Controller:
         for k, i in self.cooldown_timers.items():
             self.cooldown_timers[k] += deltaT
 
-        self.spawn_enemies()
         # Remove enemies that are dead or off screen
         indices_to_forget = [
             i
             for i, e in enumerate(self.enemies)
-            if e.position[1] >= g.SCREEN_SIZE[1] + e.size[1] or not e.alive
+            if e.is_outside_screen() or not e.alive
         ]
         for i in indices_to_forget:
             self.enemies.pop(i)
+
+        if len(indices_to_forget) >= 1:
+            print(f"killed {len(indices_to_forget)} enemies")
 
         for b in get_bullets_for_shooter(g.PLAYER_SHOOTER_GROUP):
             for e in self.enemies:
@@ -79,6 +81,7 @@ class Controller:
                 if distance <= e.hitbox_size:
                     e.on_hit(e)
                     b.on_hit()
+        self.spawn_enemies()
 
     def draw_all_enemies(self):
         [e.draw() for e in self.enemies]
