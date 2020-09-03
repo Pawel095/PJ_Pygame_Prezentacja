@@ -59,14 +59,6 @@ class Player(Base):
 
         self.velocity = (vx, vy)
 
-    def update(self, deltaT):
-        self.update_timers(deltaT)
-        if self.alive:
-            self.movement()
-            self.shooting()
-            self.check_for_bullet_hits()
-        super().update(deltaT)
-
     def check_for_bullet_hits(self):
         bullets = get_bullets_for_shooter(g.ENEMY_SHOOTER_GROUP)
         for b in bullets:
@@ -75,6 +67,14 @@ class Player(Base):
                 self.hp -= 1
                 if self.hp <= 0:
                     self.alive = False
+
+    def update(self, deltaT):
+        self.update_timers(deltaT)
+        if self.alive:
+            self.movement()
+            self.shooting()
+            self.check_for_bullet_hits()
+        super().update(deltaT)
 
     def draw(self):
         if self.alive:

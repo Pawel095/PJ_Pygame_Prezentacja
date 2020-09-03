@@ -1,5 +1,5 @@
 from abc import ABC
-
+import global_vars as g
 import pygame
 
 
@@ -13,9 +13,10 @@ class Base(ABC):
         acceleration=(0, 0),
     ):
         self.sprite = sprite
-        self.size = self.sprite.get_rect()[2:]
-        self.hitbox_size = max(self.size)
-        self.collision_radius = max(self.size) / 2
+        if sprite is not None:
+            self.size = self.sprite.get_rect()[2:]
+            self.hitbox_size = max(self.size)
+            self.collision_radius = max(self.size) / 2
         self.speed = speed
         self.position = position
         self.velocity = velocity
@@ -27,6 +28,14 @@ class Base(ABC):
     def approach(cls, current, target, step=0.1):
         delta = target - current
         return current + delta * step
+
+    def is_outside_screen(self):
+        return (
+            self.position[0] + self.size[0] <= 0
+            or self.position[1] + self.size[1] <= 0
+            or self.position[0] >= g.SCREEN_SIZE[0]
+            or self.position[1] >= g.SCREEN_SIZE[1]
+        )
 
     def update(self, deltaT):
         self.__linear_update(deltaT)
