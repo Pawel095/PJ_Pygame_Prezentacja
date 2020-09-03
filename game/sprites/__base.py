@@ -1,6 +1,8 @@
 from abc import ABC
-import global_vars as g
+
 import pygame
+
+import global_vars as g
 
 
 class Base(ABC):

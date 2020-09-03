@@ -1,7 +1,10 @@
-from .__base import Base
-import global_vars as g
 import random
+
 import pygame
+
+import global_vars as g
+
+from .__base import Base
 
 
 class BackgroundParticle(Base):
@@ -19,7 +22,7 @@ class BackgroundParticle(Base):
         if self.is_outside_screen():
             self.position = (
                 random.randint(0, g.SCREEN_SIZE[0]),
-                0+self.size[1],
+                0 + self.size[1],
             )
 
     def draw(self):
