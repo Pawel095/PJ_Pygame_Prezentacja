@@ -1,19 +1,23 @@
 import pygame
 
 import events
-from loader import assets
+import global_vars as g
+import loader
 
 from .__base import Base
 from .bullets import Bullet
+from .bullets import get_bullets_for_shooter
 
 
 class Player(Base):
     def __init__(self, *args, **kwargs):
-        sprite = assets.get("player")
+        sprite = loader.assets.get("player")
         sprite = pygame.transform.rotozoom(sprite, 180, 0.50)
 
         self.shoot_cooldown = 0.5
         self.shoot_cooldown_timer = 0
+
+        self.hp = 2
 
         super().__init__(sprite, speed=500, position=(400, 300), *args, **kwargs)
 
@@ -28,7 +32,12 @@ class Player(Base):
         if events.SHOOT:
             if self.shoot_cooldown_timer >= self.shoot_cooldown:
                 self.shoot_cooldown_timer = 0
-                Bullet("bullet", self.position, velocity=(0, -400), shooter="p")
+                Bullet(
+                    "bullet",
+                    self.position,
+                    velocity=(0, -400),
+                    shooter=g.PLAYER_SHOOTER_GROUP,
+                )
 
     def movement(self):
         vx, vy = self.velocity
@@ -52,9 +61,21 @@ class Player(Base):
 
     def update(self, deltaT):
         self.update_timers(deltaT)
-        self.movement()
-        self.shooting()
+        if self.alive:
+            self.movement()
+            self.shooting()
+            self.check_for_bullet_hits()
         super().update(deltaT)
 
+    def check_for_bullet_hits(self):
+        bullets = get_bullets_for_shooter(g.ENEMY_SHOOTER_GROUP)
+        for b in bullets:
+            if b.distance_from(self) <= self.hitbox_size:
+                b.on_hit()
+                self.hp -= 1
+                if self.hp <= 0:
+                    self.alive = False
+
     def draw(self):
-        super().draw()
+        if self.alive:
+            super().draw()

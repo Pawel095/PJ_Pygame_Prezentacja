@@ -1,31 +1,26 @@
-from loader import assets
 import random
-import global_vars
+
+import global_vars as g
+import loader
 
 from .__base import Base
 from .bullets import Bullet
+from .bullets import get_bullets_for_shooter
 
 
 class Enemy(Base):
-    def __init__(self, sprite_key):
-        sprite = assets[sprite_key]
-        self.alive = True
-        super().__init__(sprite, speed=300, position=(400, 100))
+    def __init__(self, sprite_key, *args, **kwargs):
+        sprite = loader.assets[sprite_key]
+        super().__init__(sprite)
 
-    def update(self, deltaT):
-        super().update(deltaT)
-
-    def draw(self):
-        super().draw()
-
-    def can_be_forgotten(self):
-        pass
+    def on_hit(self, other):
+        self.alive = False
 
 
 class Normal(Enemy):
     def __init__(self):
-        super().__init__("normal_enemy")
-        randx = random.randint(self.size[0], global_vars.SCREEN_SIZE[0] - self.size[0])
+        super().__init__("normal_enemy", speed=(300))
+        randx = random.randint(self.size[0], g.SCREEN_SIZE[0] - self.size[0])
         self.position = (randx, -self.size[1])
         self.shoot_cooldown = 1
         self.shoot_cooldown_timer = 0
@@ -34,7 +29,7 @@ class Normal(Enemy):
     def shoot(self):
         if self.shoot_cooldown_timer >= self.shoot_cooldown:
             self.shoot_cooldown_timer = 0
-            Bullet("e_bullet", self.position, (0, 300), shooter="e")
+            Bullet("e_bullet", self.position, (0, 300), shooter=g.ENEMY_SHOOTER_GROUP)
 
     def update(self, deltaT):
         self.shoot_cooldown_timer += deltaT
@@ -48,15 +43,12 @@ class Controller:
     def __init__(self):
         self.cooldown = {
             "normal": 3,
-            "turret": 10,
         }
         self.cooldown_timers = {
             "normal": 0,
-            "turret": 0,
         }
         self.enemy_types = {
             "normal": Normal,
-            "turret": Normal,
         }
 
     def spawn_enemies(self):
@@ -72,7 +64,21 @@ class Controller:
             self.cooldown_timers[k] += deltaT
 
         self.spawn_enemies()
-        # TODO: Remove dead enemies
+        # Remove enemies that are dead or off screen
+        indices_to_forget = [
+            i
+            for i, e in enumerate(self.enemies)
+            if e.position[1] >= g.SCREEN_SIZE[1] + e.size[1] or not e.alive
+        ]
+        for i in indices_to_forget:
+            self.enemies.pop(i)
+
+        for b in get_bullets_for_shooter(g.PLAYER_SHOOTER_GROUP):
+            for e in self.enemies:
+                distance = b.distance_from(e)
+                if distance <= e.hitbox_size:
+                    e.on_hit(e)
+                    b.on_hit()
 
     def draw_all_enemies(self):
         [e.draw() for e in self.enemies]

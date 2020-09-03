@@ -3,8 +3,8 @@ import logging
 import pygame
 
 import events
-import loader
 import global_vars
+import loader
 from sprites import bullets
 from sprites import enemy
 from sprites.player import Player
@@ -12,16 +12,17 @@ from sprites.player import Player
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-loader.load()
 pygame.init()
+loader.load()
 
 pygame.display.set_mode(global_vars.SCREEN_SIZE)
-pygame.display.set_caption("Hell of Bullets")
+pygame.display.set_caption("Hell Of Bullets")
 
 clk = pygame.time.Clock()
 player = Player()
 
 enemy_spawn_ctrl = enemy.Controller()
+
 
 fps_target = 30
 last = 0

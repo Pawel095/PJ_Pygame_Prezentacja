@@ -14,11 +14,13 @@ class Base(ABC):
     ):
         self.sprite = sprite
         self.size = self.sprite.get_rect()[2:]
+        self.hitbox_size = max(self.size)
         self.collision_radius = max(self.size) / 2
         self.speed = speed
         self.position = position
         self.velocity = velocity
         self.acceleration = acceleration
+        self.alive = True
         super().__init__()
 
     @classmethod
