@@ -3,10 +3,6 @@ import pygame
 import events
 import global_vars
 import loader
-from sprites import bullets
-from sprites import enemy
-from sprites.background import Background
-from sprites.player import Player
 
 pygame.init()
 loader.load()
@@ -15,13 +11,8 @@ pygame.display.set_mode(global_vars.SCREEN_SIZE)
 pygame.display.set_caption("Hell Of Bullets")
 
 clk = pygame.time.Clock()
-player = Player()
-bg = Background()
-enemy_spawn_ctrl = enemy.Controller()
+WHITE = (255, 255, 255)
 
-
-fps_target = 30
-last = 0
 running = True
 while running:
     deltaT = clk.tick(60) / 1000
@@ -31,18 +22,21 @@ while running:
         running = False
 
     # PHYSICS AND CONTROLLER UPDATES
-    player.update(deltaT)
-    bullets.update_all_bullets(deltaT)
-    enemy_spawn_ctrl.update(deltaT)
-    bg.update(deltaT)
 
     # RENDERING
     srf = pygame.display.get_surface()
     srf.fill((0, 0, 0))
 
-    bg.draw()
-    player.draw()
-    bullets.draw_all_bullets()
-    enemy_spawn_ctrl.draw_all_enemies()
+    if events.UP:
+        pygame.draw.rect(srf, WHITE, (349, 210, 100, 100), 1)
+
+    if events.DOWN:
+        pygame.draw.rect(srf, WHITE, (213, 346, 100, 100), 1)
+    if events.LEFT:
+        pygame.draw.rect(srf, WHITE, (349, 346, 100, 100), 1)
+    if events.RIGHT:
+        pygame.draw.rect(srf, WHITE, (485, 346, 100, 100), 1)
+    if events.SHOOT:
+        pygame.draw.rect(srf, WHITE, (213, 482, 372, 100), 1)
 
     pygame.display.update()
