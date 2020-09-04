@@ -8,7 +8,6 @@ from sprites import enemy
 from sprites.background import Background
 from sprites.player import Player
 
-
 pygame.init()
 loader.load()
 

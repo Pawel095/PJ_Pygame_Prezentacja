@@ -8,18 +8,9 @@ from .bullets import Bullet
 from .bullets import get_bullets_for_shooter
 
 
-class Enemy(Base):
-    def __init__(self, sprite_key, *args, **kwargs):
-        sprite = loader.assets[sprite_key]
-        super().__init__(sprite)
-
-    def on_hit(self, other):
-        self.alive = False
-
-
-class Normal(Enemy):
+class Normal(Base):
     def __init__(self):
-        super().__init__("normal_enemy", speed=(300))
+        super().__init__(loader.assets["normal_enemy"], speed=(300))
         randx = random.randint(self.size[0], g.SCREEN_SIZE[0] - self.size[0])
         self.position = (randx, -self.size[1])
         self.shoot_cooldown = 1
@@ -35,6 +26,9 @@ class Normal(Enemy):
         self.shoot_cooldown_timer += deltaT
         self.shoot()
         super().update(deltaT)
+
+    def on_hit(self, other):
+        self.alive = False
 
 
 class Controller:
@@ -69,6 +63,7 @@ class Controller:
             for i, e in enumerate(self.enemies)
             if e.is_outside_screen() or not e.alive
         ]
+        indices_to_forget.reverse()
         for i in indices_to_forget:
             self.enemies.pop(i)
 
