@@ -1,7 +1,6 @@
 import pygame
 
 import events
-import global_vars as g
 import loader
 
 from .__base import Base
@@ -14,8 +13,6 @@ class Player(Base):
 
         self.shoot_cooldown = 0.5
         self.shoot_cooldown_timer = 0
-
-        self.hp = 2
 
         super().__init__(sprite, speed=500, position=(400, 300), *args, **kwargs)
 
