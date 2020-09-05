@@ -4,8 +4,6 @@ import global_vars as g
 import loader
 
 from .__base import Base
-from .bullets import Bullet
-from .bullets import get_bullets_for_shooter
 
 
 class Normal(Base):
@@ -20,7 +18,7 @@ class Normal(Base):
     def shoot(self):
         if self.shoot_cooldown_timer >= self.shoot_cooldown:
             self.shoot_cooldown_timer = 0
-            Bullet("e_bullet", self.position, (0, 300), shooter=g.ENEMY_SHOOTER_GROUP)
+            print("Enemy Shooting")
 
     def update(self, deltaT):
         self.shoot_cooldown_timer += deltaT
@@ -70,12 +68,6 @@ class Controller:
         if len(indices_to_forget) >= 1:
             print(f"killed {len(indices_to_forget)} enemies")
 
-        for b in get_bullets_for_shooter(g.PLAYER_SHOOTER_GROUP):
-            for e in self.enemies:
-                distance = b.distance_from(e)
-                if distance <= e.hitbox_size:
-                    e.on_hit(e)
-                    b.on_hit()
         self.spawn_enemies()
 
     def draw_all_enemies(self):
