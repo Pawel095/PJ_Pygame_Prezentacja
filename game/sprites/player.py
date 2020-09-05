@@ -5,8 +5,6 @@ import global_vars as g
 import loader
 
 from .__base import Base
-from .bullets import Bullet
-from .bullets import get_bullets_for_shooter
 
 
 class Player(Base):
@@ -32,12 +30,7 @@ class Player(Base):
         if events.SHOOT:
             if self.shoot_cooldown_timer >= self.shoot_cooldown:
                 self.shoot_cooldown_timer = 0
-                Bullet(
-                    "bullet",
-                    self.position,
-                    velocity=(0, -400),
-                    shooter=g.PLAYER_SHOOTER_GROUP,
-                )
+                print("Player shooting!")
 
     def movement(self):
         vx, vy = self.velocity
@@ -59,21 +52,11 @@ class Player(Base):
 
         self.velocity = (vx, vy)
 
-    def check_for_bullet_hits(self):
-        bullets = get_bullets_for_shooter(g.ENEMY_SHOOTER_GROUP)
-        for b in bullets:
-            if b.distance_from(self) <= self.hitbox_size:
-                b.on_hit()
-                self.hp -= 1
-                if self.hp <= 0:
-                    self.alive = False
-
     def update(self, deltaT):
         self.update_timers(deltaT)
         if self.alive:
             self.movement()
             self.shooting()
-            self.check_for_bullet_hits()
         super().update(deltaT)
 
     def draw(self):
